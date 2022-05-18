@@ -59,12 +59,12 @@ int main(int argc, char **argv) {
     while (1) {
       clientlen = sizeof(clientaddr);
       // connfd = Accept(listenfd, (SA *)&clientaddr, &clientlen);
-      connfdp = Malloc(sizeof(int));
+      connfdp = Malloc(sizeof(int));                                
       *connfdp = Accept(listenfd, (SA*) &clientaddr, &clientlen);
       
       Getnameinfo((SA *)&clientaddr, clientlen, clienthost, MAXLINE, clientport, MAXLINE, 0);
       printf("Accepted connection from (%s, %s)\n", clienthost, clientport);
-      Pthread_create(&tid, NULL, thread, connfdp);
+      Pthread_create(&tid, NULL, thread, connfdp);            //connfd를 포인터로 한 겹 더 싸서 thread에 인자로 보내줌 
       // doit(connfd);   // line:netp:tiny:doit
       // Close(connfd);  // line:netp:tiny:close
     }

@@ -31,14 +31,14 @@ void build_http_header(char *http_header, char *hostname, char *path, rio_t *cli
 int connect_endServer(char *hostname, int port);
 
 /* Thread Routine*/
-void *thread(void *vargp){
-  int connfd = *((int *)vargp);
-  Pthread_detach(pthread_self());
-  Free(vargp); //
-  doit(connfd);
-  Close(connfd); //
-  return NULL;
-}
+// void *thread(void *vargp){
+//   int connfd = *((int *)vargp);
+//   Pthread_detach(pthread_self());
+//   Free(vargp); //
+//   doit(connfd);
+//   Close(connfd); //
+//   return NULL;
+// }
 
 int main(int argc, char **argv) {
     int listenfd, connfd;             //listen to connection
@@ -58,15 +58,15 @@ int main(int argc, char **argv) {
     
     while (1) {
       clientlen = sizeof(clientaddr);
-      // connfd = Accept(listenfd, (SA *)&clientaddr, &clientlen);
-      connfdp = Malloc(sizeof(int));
-      *connfdp = Accept(listenfd, (SA*) &clientaddr, &clientlen);
+      connfd = Accept(listenfd, (SA *)&clientaddr, &clientlen);
+      // connfdp = Malloc(sizeof(int));
+      // *connfdp = Accept(listenfd, (SA*) &clientaddr, &clientlen);
       
       Getnameinfo((SA *)&clientaddr, clientlen, clienthost, MAXLINE, clientport, MAXLINE, 0);
       printf("Accepted connection from (%s, %s)\n", clienthost, clientport);
-      Pthread_create(&tid, NULL, thread, connfdp);
-      // doit(connfd);   // line:netp:tiny:doit
-      // Close(connfd);  // line:netp:tiny:close
+      // Pthread_create(&tid, NULL, thread, connfdp);
+      doit(connfd);   // line:netp:tiny:doit
+      Close(connfd);  // line:netp:tiny:close
     }
     return 0;
 }
